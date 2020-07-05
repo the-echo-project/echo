@@ -1,0 +1,4 @@
+log:
+  loc: "./testing_scrap/echo.log"
+archive:
+  store: "./testing_scrap"
