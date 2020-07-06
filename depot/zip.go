@@ -2,7 +2,6 @@ package depot
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"os"
 	"github.com/the-echo-project/echo/log"
@@ -15,9 +14,9 @@ type Zip struct {
 	Files []string // files/directories to add to the archive
 }
 
-func (z *Zip) Pack() error {
+func (z *Zip) Pack(directory string) error {
 	// Pull archive store from config, and create a file.
-	zipArchive, err := os.Create(fmt.Sprintf("%s/%s", viper.GetString("archive.store"), z.Name))
+	zipArchive, err := os.Create(fmt.Sprintf("%s/%s", directory, z.Name))
 	if err != nil {
 		return fmt.Errorf("Error creating archive: %s", err)
 	}

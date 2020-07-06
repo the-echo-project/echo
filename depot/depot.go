@@ -13,11 +13,11 @@ Supported archive formats are;
 package depot
 
 type Archive interface {
-	Pack() // Create an archive
+	Pack(string) // Create an archive
 	Unpack() // Unpack existing archive
 	Move() // Move an archive
 	Verify() // Verify integrity of an archive
-	
+
 }
 
 

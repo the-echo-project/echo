@@ -1,8 +1,6 @@
 package depot
 
 import (
-	"fmt"
-	"github.com/spf13/viper"
 	"strings"
 	"testing"
 )
@@ -13,7 +11,7 @@ func TestStatFiles(t *testing.T) {
 
 	zip := Zip{
 		Name: "test_zip.zip",
-		Files: []string{"/Users/ben/Desktop/development/go/mywork/echo/testing_scrap/TestStatFiles"},
+		Files: []string{"../testing_scrap/TestStatFiles"},
 	}
 	files := zip.statFiles()
 
@@ -40,22 +38,12 @@ func TestStatFiles(t *testing.T) {
 }
 
 func TestZipPack(t *testing.T) {
-	viper.SetConfigName("echo_conf")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("../conf/")
-	viper.Set("archive.store", "../testing_scrap")
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
-
 	zip := Zip{
 		Name: "test_zip.zip",
-		Files: []string{"/Users/ben/Desktop/development/go/mywork/echo/testing_scrap/TestStatFiles"},
+		Files: []string{"../testing_scrap/TestZipPack"},
 	}
 
-	err = zip.Pack()
+	err := zip.Pack("../testing_scrap/output_dump")
 	if err != nil {
 		t.Log(err)
 		t.Fail()
