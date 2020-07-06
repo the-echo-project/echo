@@ -3,13 +3,15 @@
 
 # Some vision
 
+```DISCLAIMER: While below is a generic vision for where the project might be going in the future, the current focus is on the server-side system. Currently no work will be done for any external app for iOS or Android. Once the server-side API is fully functional, we can begin building integrations. ```
+
 Here are my initial notes for this project. Hopefully for those wanting to join the team, it'll provide some insight into the project goals, and what we're trying to achieve.
 
 Firstly, I suppose, is why? Tools exist like “Deadswitch” and “Deadmansswitch”, that will allow you to send emails or decryption keys to a party in the event of “no-contact”, but I feel as though they aren’t particularly sophisticated. Essentially, their service will stores messages, and email them to the recipients you configure. In most cases, and for the general public, this simplicity is enough, but for those of us who are technically-minded, or have a lot of data, it’s not ideal.
 
-Let’s take my personal case. I’m somewhat of a recluse, and I’ve had issues with feeling misunderstood and lonely. When I die, I would like to have an elegant archive of data, that perfectly captures my personality and life, in the hopes someone will be able to understand why I made the choices I did, and learn about who I was behind-the-scenes. In addition to personal notes & content for the people I know, I would also want to have all of my account credentials for my bank, cryptocurrency, web-servers, my computer systems etc.. It would all be in a package that would tell a story, the story of me.
+Let's get an example of a use-case. You've got data that would be inaccessible should you die or be otherwise incapacitated, and you want to make sure you family (or other contact) is able to access and view it. It could be account passwords, a journal, cryptocurrency files, or anything else storable in a archival format (zip, tar etc).
 
-That’s a bit soppy and morbid, and I want to approach this project from a technical perspective rather than emotional, but it raises some interesting questions, for example;
+Although on the surface it seems like  simple concept, there are many questions this scenario raises;
 
 - How would such a service be hosted?
  - For me, based on the systems I already use, I would create a Digital Ocean droplet, and run the application there.
