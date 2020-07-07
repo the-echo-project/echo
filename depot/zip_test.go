@@ -13,7 +13,11 @@ func TestStatFiles(t *testing.T) {
 		Name: "test_zip.zip",
 		Files: []string{"../testing_scrap/TestStatFiles"},
 	}
-	files := zip.statFiles()
+	files, err := zip.statFiles()
+	if err != nil {
+		t.Logf("Could not stat ZIP files: %s", err)
+		t.Fail()
+	}
 
 	hasFiles := func() bool {
 		count := 0
@@ -43,7 +47,10 @@ func TestZipPack(t *testing.T) {
 		Files: []string{"../testing_scrap/TestZipPack"},
 	}
 
-	err := zip.Pack("../testing_scrap/output_dump")
+	f, err := zip.statFiles()
+	t.Log(f)
+
+	err = zip.Pack("../testing_scrap/output_dump")
 	if err != nil {
 		t.Log(err)
 		t.Fail()
