@@ -2,7 +2,6 @@ package log
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"os"
 	"time"
 )
@@ -13,8 +12,8 @@ type Logger struct {
 
 var log *os.File
 
-func InitLogger() {
-	l, err := os.OpenFile(viper.GetString("log.loc"), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
+func InitLogger(loc string) {
+	l, err := os.OpenFile(fmt.Sprintf("%s%s", loc, "echo.log.0"), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
 	if err != nil {
 		panic(fmt.Errorf("Fatal error starting log: %s \n", err))
 	}
