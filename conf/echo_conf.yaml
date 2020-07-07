@@ -1,4 +1,4 @@
 log:
-  loc: "./testing_scrap/echo.log"
+  loc: "./testing_scrap"
 archive:
   store: "./testing_scrap"
