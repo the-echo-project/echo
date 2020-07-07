@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 )
 
+// TODO: Currently ZIP logic adds the absolute path for files. Need to find a way to get common parent and better organise the structure when adding files from many sources.
+
 type Zip struct {
 	Name string // output name
 	Files []string // files/directories to add to the archive
