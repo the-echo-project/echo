@@ -17,7 +17,14 @@ type Archive interface {
 	Unpack() // Unpack existing archive
 	Move() // Move an archive
 	Verify() // Verify integrity of an archive
+}
 
+// FindCommonParent returns the common directory parent for a slice of absolute paths. The
+// resulting directory does not contain a trailing slash.
+//
+func FindCommonParent(paths []string) string {
+
+	return ""
 }
 
 
