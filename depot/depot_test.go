@@ -1,6 +1,9 @@
 package depot
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 /*
 TestFindCommonParents test the function's ability to find a common directory parent for the
@@ -21,7 +24,7 @@ func TestFindCommonParent(t *testing.T) {
 	}
 
 	expected := "/home/user"
-	if got := FindCommonParent(paths); got != "/home/user/" {
+	if got := FindCommonParent(os.PathSeparator, paths...); got != expected {
 		t.Logf("Expected common parent of %s, got %s", expected, got)
 		t.Fail()
 	}
