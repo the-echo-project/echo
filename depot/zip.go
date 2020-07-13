@@ -1,21 +1,22 @@
 package depot
 
 import (
+	"archive/zip"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"archive/zip"
 	"path/filepath"
 )
-
-// TODO: Currently ZIP logic adds the absolute path for files. Need to find a way to get common parent and better organise the structure when adding files from many sources.
 
 type Zip struct {
 	Name string // output name
 	Files []string // files/directories to add to the archive
+	ptr *os.File
 }
 
 // Pack zips files in zip.Files into the provided directory. It preserves the full directory structure.
+//
+// TODO: Once database is set up, we need to store the file's MD5 checksum, and location data.
 func (z *Zip) Pack(directory string) error {
 	zipArchive, err := os.Create(fmt.Sprintf("%s/%s", directory, z.Name))
 	if err != nil {
@@ -37,6 +38,13 @@ func (z *Zip) Pack(directory string) error {
 		return fmt.Errorf("unable to write ZIP archive: %s", err)
 	}
 	return nil
+}
+
+// TODO: Assess the need for type-specific behaviour. Verify is part of the Archive interface for this reason.
+func (z *Zip) Verify() {
+	// Pull file match from DB. Return error if no match.
+
+	// Compare checksum from DB to what we calculate on the fly.
 }
 
 func (z *Zip) statFiles() (filesToZip []string, err error) {

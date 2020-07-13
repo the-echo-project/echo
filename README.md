@@ -1,4 +1,5 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) 
+
 #[Slack Invite Link](https://join.slack.com/t/echo-grv2201/shared_invite/zt-fugeli6c-JiPbjJyjRIvsPOfx6~jWWA)
 ![logo](./images/infographic1.png)
 

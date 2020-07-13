@@ -41,7 +41,7 @@ func TestStatFiles(t *testing.T) {
 	}
 }
 
-func TestZipPack(t *testing.T) {
+func TestZip_Pack(t *testing.T) {
 	zip := Zip{
 		Name: "test_zip.zip",
 		Files: []string{"../testing_scrap/TestZipPack"},
@@ -55,4 +55,8 @@ func TestZipPack(t *testing.T) {
 		t.Log(err)
 		t.Fail()
 	}
+}
+
+func TestZip_Verify(t *testing.T) {
+
 }
