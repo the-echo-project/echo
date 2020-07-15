@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type Zip struct {
@@ -86,13 +87,28 @@ func (z *Zip) statFiles() (filesToZip []string, err error) {
 }
 
 func (z *Zip) writeFiles(zw *zip.Writer, paths []string) error {
+
+	// We can trim this prefix from the paths we write. It basically removes the path up to the first
+	// time a character differs, imitating typical ZIP behaviour.
+	//
+	// For example, consider the following paths;
+	// 	- /home/user/file1.txt
+	// 	- /home/user/file2.txt
+	//	- /home/user/folder1/file3.txt
+	//
+	// The structure of the ZIP file will become;
+	//	- file1.txt
+	//	- file2.txt
+	//	- folder1/file3.txt
+	commonDir := FindCommonParent(os.PathSeparator, paths...)
+
 	for i := range paths {
 		data, err := ioutil.ReadFile(paths[i])
 		if err != nil {
 			return err
 		}
 
-		file, err := zw.Create(paths[i])
+		file, err := zw.Create(strings.TrimPrefix(paths[i], commonDir))
 		if err != nil {
 			return err
 		}

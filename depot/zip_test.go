@@ -13,6 +13,7 @@ func TestStatFiles(t *testing.T) {
 		Name: "test_zip.zip",
 		Files: []string{"../testing_scrap/TestStatFiles"},
 	}
+
 	files, err := zip.statFiles()
 	if err != nil {
 		t.Logf("Could not stat ZIP files: %s", err)
