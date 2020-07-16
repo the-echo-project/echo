@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/spf13/viper"
-	"github.com/the-echo-project/echo/conf"
+	"github.com/the-echo-project/echo/internal/conf"
 	"github.com/the-echo-project/echo/log"
 )
 

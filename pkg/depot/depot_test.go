@@ -24,7 +24,7 @@ func TestFindCommonParent(t *testing.T) {
 	}
 
 	expected := "/home/user"
-	if got := FindCommonParent(os.PathSeparator, paths...); got != expected {
+	if got := findCommonParent(os.PathSeparator, paths...); got != expected {
 		t.Logf("Expected common parent of %s, got %s", expected, got)
 		t.Fail()
 	}

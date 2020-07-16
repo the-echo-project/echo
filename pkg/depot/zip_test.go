@@ -11,7 +11,7 @@ func TestStatFiles(t *testing.T) {
 
 	zip := Zip{
 		Name: "test_zip.zip",
-		Files: []string{"../testing_scrap/TestStatFiles"},
+		Files: []string{"../../test/data/TestStatFiles"},
 	}
 
 	files, err := zip.statFiles()
@@ -45,13 +45,13 @@ func TestStatFiles(t *testing.T) {
 func TestZip_Pack(t *testing.T) {
 	zip := Zip{
 		Name: "test_zip.zip",
-		Files: []string{"../testing_scrap/TestZipPack"},
+		Files: []string{"../../test/data/TestZipPack"},
 	}
 
 	f, err := zip.statFiles()
 	t.Log(f)
 
-	err = zip.Pack("../testing_scrap/output_dump")
+	err = zip.Pack("../../test/output_dump")
 	if err != nil {
 		t.Log(err)
 		t.Fail()

@@ -100,7 +100,7 @@ func (z *Zip) writeFiles(zw *zip.Writer, paths []string) error {
 	//	- file1.txt
 	//	- file2.txt
 	//	- folder1/file3.txt
-	commonDir := FindCommonParent(os.PathSeparator, paths...)
+	commonDir := findCommonParent(os.PathSeparator, paths...)
 
 	for i := range paths {
 		data, err := ioutil.ReadFile(paths[i])

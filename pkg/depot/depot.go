@@ -24,7 +24,7 @@ type Archive interface {
 // FindCommonParent finds the common directory shared by all paths.
 //
 // Result doesn't contain trailing slash.
-func FindCommonParent(sep byte, paths ...string) string {
+func findCommonParent(sep byte, paths ...string) string {
 	// Thanks for rosettacode.org for this algorithm
 
 	// Special cases
