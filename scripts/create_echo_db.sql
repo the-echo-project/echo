@@ -1,5 +1,5 @@
 create database echo
-	with owner ben;
+	with owner echo;
 
 -- Unknown how to generate base type type
 
