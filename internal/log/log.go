@@ -6,19 +6,21 @@ import (
 	"time"
 )
 
-type Logger struct {
-	logLoc *os.File
-}
-
 var log *os.File
 
-// TODO: Have logger intialisation differ between COMMAND and SERVICE modes. A single command should output to stdout, while a running process should output to it's designated log file.
-func InitLogger(loc string) {
-	l, err := os.OpenFile(fmt.Sprintf("%s/%s", loc, "echo.log.0"), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
+// Initialises logger for file. Used for a persistent service.
+// TODO: Log preservation by incrementing when new service is spawned.
+func InitFileLogger(directory string) {
+	l, err := os.OpenFile(fmt.Sprintf("%s/%s", directory, "echo.log.0"), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
 	if err != nil {
 		panic(fmt.Errorf("Fatal error starting log: %s \n", err))
 	}
 	log = l
+}
+
+// Initialises logger for Stdout. Used for single-command mode.
+func InitStdoutLogger() {
+	log = os.Stdout
 }
 
 func Info(logLine string) {

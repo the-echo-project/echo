@@ -8,5 +8,5 @@ import (
 
 func main() {
 	conf.InitConf()
-	log.InitLogger(viper.GetString("log.loc"))
+	log.InitFileLogger(viper.GetString("log.loc"))
 }
