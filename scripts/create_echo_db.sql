@@ -1,4 +1,6 @@
 create extension if not exists "uuid-ossp";
+create extension if not exists "pgcrypto";
+
 create table launch
 (
     launch_id     uuid default uuid_generate_v4() not null

@@ -6,26 +6,26 @@ provide database functionality for Echo.
 package db
 
 import (
-	"fmt"
-	"github.com/spf13/viper"
-	"github.com/the-echo-project/echo/internal/log"
-
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/spf13/viper"
+	"github.com/the-echo-project/echo/internal/log"
 )
 
-var db *sqlx.DB
+var EchoDB *sqlx.DB
 
-func InitDB() error  {
-	var err error
-	db, err = sqlx.Open("postgres", viper.GetString("db.url"))
+func InitDB() (err error) {
+	EchoDB, err = sqlx.Open("postgres", viper.GetString("db.url"))
 	if err != nil {
-		return fmt.Errorf("database connection failed: %s", err)
+		log.Fatalf("database connection failed: %s %s", viper.GetString("db.url"), err)
+		return nil
 	}
+	defer EchoDB.Close()
 
-	err = db.Ping()
+	err = EchoDB.Ping()
 	if err != nil {
-		fmt.Errorf("database ping failed: %s", err)
+		log.Fatalf("database ping failed: %s %s", viper.GetString("db.url"), err)
+		return nil
 	}
 
 	log.Info("Database connection successful!")

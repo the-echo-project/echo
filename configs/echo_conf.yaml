@@ -1,6 +1,6 @@
 log:
-  loc: "./testing_scrap"
+  loc: "./"
 archive:
-  store: "./testing_scrap"
+  store: "./"
 db:
-  url: "jdbc:postgresql://echo@echotest123@localhost:5432/echo"
+  url: "postgresql://echo:echotest123@localhost:5432/echo?sslmode=disable"
