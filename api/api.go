@@ -1,10 +1,9 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
-	"net/http"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -24,6 +23,3 @@ func NetRun() {
 	log.Fatal(srv.ListenAndServe())
 }
 
-func Garg(){
-	fmt.Println("hey")
-}
