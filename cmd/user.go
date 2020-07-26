@@ -10,6 +10,9 @@ var(
 		Use: "user",
 		Short: "Perform user commands.",
 		Long: "Perform user commands.",
+		Run: func(cmd *cobra.Command, args []string) {
+
+		},
 	}
 
 	UserFlags UserCmdFlag
@@ -24,6 +27,8 @@ type UserCmdFlag struct {
 }
 
 func init() {
+	rootCmd.AddCommand(userCmd)
+
 	userCmd.Flags().BoolVarP(&UserFlags.Create, "create", "c",false, "Create a new user (use with the -d flag)")
 	userCmd.Flags().BoolVarP(&UserFlags.Remove, "remove", "r", false, "Remove a user (use with the -d flag)")
 	userCmd.Flags().BoolVarP(&UserFlags.Update, "update", "u", false, "Update an existing user (use with the -d flag)")

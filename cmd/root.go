@@ -21,6 +21,6 @@ func Execute() error {
 
 func init() {
 	cobra.OnInitialize(conf.InitConf)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.echo.yaml")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.echo.yaml)")
 }
 
