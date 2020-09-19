@@ -32,10 +32,10 @@ func Error(logLine string) {
 }
 
 func Errorf(format string, args ...interface{}) {
-	log.WriteString(fmt.Sprintf("%s ERROR %s %s \n", time.Now().Format(time.UnixDate), fmt.Sprintf(format, args...)))
+	log.WriteString(fmt.Sprintf("%s ERROR %s \n", time.Now().Format(time.UnixDate), fmt.Sprintf(format, args...)))
 }
 
 func Fatalf(format string, args ...interface{}) {
-	log.WriteString(fmt.Sprintf("%s FATAL %s %s \n", time.Now().Format(time.UnixDate), fmt.Sprintf(format, args...)))
+	log.WriteString(fmt.Sprintf("%s FATAL %s \n", time.Now().Format(time.UnixDate), fmt.Sprintf(format, args...)))
 	os.Exit(1)
 }
