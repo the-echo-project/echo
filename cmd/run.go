@@ -12,7 +12,7 @@ var runCmd = &cobra.Command{
 	Short: "Start the Echo service.",
 	Long: "Start the Echo service",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.InitStdoutLogger()
+		log.InitLogger()
 		if err := db.InitDB(); err != nil {
 			panic(err)
 		}

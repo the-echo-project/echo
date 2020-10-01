@@ -1,5 +1,5 @@
 log:
-  loc: "./"
+  loc: "/Users/ben/Desktop/development/go/mywork/echo/test/output_dump"
 archive:
   store: "./"
 db:

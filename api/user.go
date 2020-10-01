@@ -15,7 +15,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	var u User
 	err := json.NewDecoder(r.Body).Decode(&u)
 	if err != nil {
-		log.Errorf("Couldn't decode JSON for createUser: %s", err)
+		log.This.Error("Couldn't decode JSON for createUser: %s", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
