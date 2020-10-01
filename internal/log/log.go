@@ -2,40 +2,86 @@ package log
 
 import (
 	"fmt"
+	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/viper"
+	"log"
 	"os"
-	"time"
+	"path/filepath"
+	"github.com/the-echo-project/echo/sdk/helper/pathutil"
 )
 
-var log *os.File
+const (
+	// DefaultLogPath is the default location for the logs.
+	DefaultLogPath = "~/.echo/log"
 
-// Initialises logger for file. Used for a persistent service.
-// TODO: Log preservation by incrementing when new service is spawned.
-func InitFileLogger(directory string) {
-	l, err := os.OpenFile(fmt.Sprintf("%s/%s", directory, "echo.log.0"), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
+	// LogPathEnv is the environment variable that will override
+	// the log location.
+	LogPathEnv = "ECHO_LOG_PATH"
+
+	DefaultLogFile = "echo_log.0"
+)
+
+var (
+	This Log
+)
+
+type Log struct {
+	logger *log.Logger
+	stdout *os.File
+}
+
+func (l *Log) Info(msg string, args ...interface{}) {
+	if len(args) != 0 {
+		msg = concat(msg, args)
+	}
+
+	l.logger.Printf("INFO %s\n", msg)
+}
+
+func (l *Log) Warning(msg string, args ...interface{}) {
+	if len(args) != 0 {
+		msg = concat(msg, args)
+	}
+
+	l.logger.Printf("WARN %s\n", msg)
+}
+
+func (l *Log) Error(msg string, args ...interface{}) {
+	if len(args) != 0 {
+		msg = concat(msg, args)
+	}
+
+	l.logger.Printf("ERROR %s\n", msg)
+}
+
+func concat(format string, args ...interface{}) string {
+	return fmt.Sprintf(format, args...)
+}
+
+func InitLogger() {
+	var err error
+
+	path := os.Getenv(LogPathEnv)
+	if path == "" {
+		path, err = homedir.Expand(DefaultLogPath)
+		if err != nil {
+			panic(fmt.Errorf("Couldn't start log service, home directory expand failed."))
+		}
+	}
+
+	if v := viper.GetString("log.loc"); v != "" {
+		path = v
+	}
+
+	path, err = filepath.Abs(path)
+	if err != nil {
+		panic(fmt.Errorf("Couldn't start log service, path could not be found."))
+	}
+
+	l, err := os.OpenFile(fmt.Sprintf("%s/%s", pathutil.PathWithoutTrailingSlash(path), DefaultLogFile), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
 	if err != nil {
 		panic(fmt.Errorf("Fatal error starting log: %s \n", err))
 	}
-	log = l
-}
 
-// Initialises logger for Stdout. Used for single-command mode.
-func InitStdoutLogger() {
-	log = os.Stdout
-}
-
-func Info(logLine string) {
-	log.WriteString(fmt.Sprintf("%s INFO %s \n", time.Now().Format(time.UnixDate), logLine))
-}
-
-func Error(logLine string) {
-	log.WriteString(fmt.Sprintf("%s ERROR %s \n", time.Now().Format(time.UnixDate), logLine))
-}
-
-func Errorf(format string, args ...interface{}) {
-	log.WriteString(fmt.Sprintf("%s ERROR %s \n", time.Now().Format(time.UnixDate), fmt.Sprintf(format, args...)))
-}
-
-func Fatalf(format string, args ...interface{}) {
-	log.WriteString(fmt.Sprintf("%s FATAL %s \n", time.Now().Format(time.UnixDate), fmt.Sprintf(format, args...)))
-	os.Exit(1)
+	This.logger = log.New(l, "", log.Lshortfile|log.Ldate|log.Ltime)
 }

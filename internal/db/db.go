@@ -17,17 +17,17 @@ var EchoDB *sqlx.DB
 func InitDB() (err error) {
 	EchoDB, err = sqlx.Open("postgres", viper.GetString("db.url"))
 	if err != nil {
-		log.Fatalf("database connection failed: %s %s", viper.GetString("db.url"), err)
+		log.This.Info("database connection failed: %s %s", viper.GetString("db.url"), err)
 		return nil
 	}
 	defer EchoDB.Close()
 
 	err = EchoDB.Ping()
 	if err != nil {
-		log.Fatalf("database ping failed: %s %s", viper.GetString("db.url"), err)
+		log.This.Error("database ping failed: %s %s", viper.GetString("db.url"), err)
 		return nil
 	}
 
-	log.Info("Database connection successful!")
+	log.This.Info("Database connection successful!")
 	return nil
 }
