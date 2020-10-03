@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/the-echo-project/echo/api/models"
 	"net/http"
 	"strings"
 )
@@ -34,7 +35,7 @@ func JwtVerify(next http.Handler) http.Handler {
 			return
 		}
 
-		tk := &Token{}
+		tk := &models.Token{}
 
 		_, err := jwt.ParseWithClaims(header, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil

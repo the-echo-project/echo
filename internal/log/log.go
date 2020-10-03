@@ -35,7 +35,7 @@ func (l *Log) Info(msg string, args ...interface{}) {
 		msg = concat(msg, args)
 	}
 
-	l.logger.Printf("INFO %s\n", msg)
+	l.logger.Output(2, fmt.Sprintf("INFO %s\n", msg))
 }
 
 func (l *Log) Warning(msg string, args ...interface{}) {
@@ -43,7 +43,7 @@ func (l *Log) Warning(msg string, args ...interface{}) {
 		msg = concat(msg, args)
 	}
 
-	l.logger.Printf("WARN %s\n", msg)
+	l.logger.Output(2, fmt.Sprintf("WARN %s\n", msg))
 }
 
 func (l *Log) Error(msg string, args ...interface{}) {
@@ -51,7 +51,7 @@ func (l *Log) Error(msg string, args ...interface{}) {
 		msg = concat(msg, args)
 	}
 
-	l.logger.Printf("ERROR %s\n", msg)
+	l.logger.Output(2,fmt.Sprintf("ERROR %s\n", msg))
 }
 
 func concat(format string, args ...interface{}) string {

@@ -1,8 +1,11 @@
 package api
 
-import "net/http"
+import (
+	"github.com/the-echo-project/echo/api/models"
+	"net/http"
+)
 
 // get user context into a token model.
-func UserContextAsTokenModel(r *http.Request) *Token {
-	return r.Context().Value("user").(*Token)
+func UserContextAsTokenModel(r *http.Request) *models.Token {
+	return r.Context().Value("user").(*models.Token)
 }

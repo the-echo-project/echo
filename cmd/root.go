@@ -2,12 +2,10 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/the-echo-project/echo/internal/conf"
+	"github.com/the-echo-project/echo/sdk/helper/confutil"
 )
 
 var (
-	cfgFile string
-
 	rootCmd = &cobra.Command{
 		Use: "echo",
 		Short: "A modern deadman's switch.",
@@ -20,7 +18,7 @@ func Execute() error {
 }
 
 func init() {
-	cobra.OnInitialize(conf.Start)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.echo.yaml)")
+	cobra.OnInitialize(confutil.LoadConfig)
+	rootCmd.PersistentFlags().StringVar(&confutil.ConfigPathOverride, "config", "", "config file (default is $HOME/.echo.yaml)")
 }
 
