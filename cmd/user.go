@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/the-echo-project/echo/api"
+	"github.com/the-echo-project/echo/api/models"
+
 )
 
 var(
@@ -23,7 +24,7 @@ type UserCmdFlag struct {
 	Remove bool
 	Update bool
 	DataJSON string
-	DataFlags api.User
+	DataFlags models.User
 }
 
 func init() {

@@ -20,7 +20,7 @@ func InitDB() (err error) {
 		log.This.Info("database connection failed: %s %s", viper.GetString("db.url"), err)
 		return nil
 	}
-	defer EchoDB.Close()
+	//defer EchoDB.Close()
 
 	err = EchoDB.Ping()
 	if err != nil {

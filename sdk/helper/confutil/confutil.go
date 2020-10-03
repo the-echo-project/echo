@@ -21,6 +21,14 @@ var (
 )
 
 func LoadConfig() {
+	if ConfigPathOverride == "" {
+		loadDefaultConfig()
+	} else {
+		loadOverrideConfig()
+	}
+}
+
+func loadDefaultConfig() {
 	var configPath string
 	if configPath = os.Getenv(ConfigPathEnv); configPath == "" {
 		configPath = DefaultConfPath
@@ -42,18 +50,17 @@ func LoadConfig() {
 	}
 }
 
-func LoadOverrideConfig() {
-	configPath := ConfigPathOverride
+func loadOverrideConfig() {
 
 	var err error
-	configPath, err = pathutil.Pathfinder(configPath)
+	ConfigPathOverride, err = pathutil.Pathfinder(ConfigPathOverride)
 	if err != nil {
-		panic(fmt.Errorf("Error finding config path %s", configPath))
+		panic(fmt.Errorf("Error finding config path %s", ConfigPathOverride))
 	}
 
 	viper.SetConfigName("echo_conf")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(pathutil.PathWithoutTrailingSlash(configPath))
+	viper.AddConfigPath(pathutil.PathWithoutTrailingSlash(ConfigPathOverride))
 
 	err = viper.ReadInConfig()
 	if err != nil {
