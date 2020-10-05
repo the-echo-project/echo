@@ -2,11 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/the-echo-project/echo/api/models"
-	"github.com/the-echo-project/echo/internal/log"
 	"github.com/the-echo-project/echo/internal/db"
+	"github.com/the-echo-project/echo/internal/log"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"time"
@@ -23,16 +22,18 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 	var dbUser models.User
 	if err = db.EchoDB.QueryRowx("SELECT * FROM users WHERE username = $1", reqUser.Username).StructScan(&dbUser); err != nil {
-		var resp = map[string]interface{}{"status": "user not found", "error": err.Error()}
-		json.NewEncoder(w).Encode(resp)
+		// Be wary of content sent back to the client
+		w.WriteHeader(http.StatusUnauthorized)
+		// Log actual database error here
 		log.This.Warning(err.Error())
 		return
 	}
 
-	errf := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(reqUser.Password))
-	if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
-		var resp = map[string]interface{}{"status": "invalid login credentials"}
-		json.NewEncoder(w).Encode(resp)
+	err = bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(reqUser.Password))
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
+		w.WriteHeader(http.StatusUnauthorized)
+		log.This.Warning(err.Error())
+		return
 	}
 
 	expiresAt := time.Now().Add(time.Minute * 100000).Unix()
@@ -49,11 +50,12 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 	tokenString, error := token.SignedString([]byte("secret"))
 	if error != nil {
-		fmt.Println(error)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	var resp = map[string]interface{}{"status": "success"}
 	resp["token"] = tokenString //Store the token in the response
-	resp["user"] = reqUser.Username
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(resp)
 }
