@@ -11,6 +11,11 @@ import (
 	"time"
 )
 
+// TODO: Add JWT secret env variable. Currently "secret"
+// TODO: Add user-definable token expiry
+// TODO: Add persistence storage layer for JWT metadata, for invalidating tokens prematurely
+// TODO: Add refresh tokens
+// TODO: Do we need a token helper package, or can it be self contained in package "api"?
 func authenticate(w http.ResponseWriter, r *http.Request) {
 	var reqUser models.User
 	err := json.NewDecoder(r.Body).Decode(&reqUser)
