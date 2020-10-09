@@ -8,7 +8,12 @@ import (
 	"github.com/the-echo-project/echo/internal/log"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"os"
 	"time"
+)
+
+var (
+	echoAuthSecret = os.Getenv("ECHO_AUTH_SECRET")
 )
 
 // TODO: Add JWT secret env variable. Currently "secret"
@@ -53,7 +58,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 
-	tokenString, error := token.SignedString([]byte("secret"))
+	tokenString, error := token.SignedString(echoAuthSecret)
 	if error != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
