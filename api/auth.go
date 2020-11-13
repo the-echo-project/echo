@@ -58,9 +58,10 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 
-	tokenString, error := token.SignedString(echoAuthSecret)
+	tokenString, error := token.SignedString([]byte(echoAuthSecret))
 	if error != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.This.Warning(error.Error())
 		return
 	}
 

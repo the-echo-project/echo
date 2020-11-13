@@ -11,5 +11,5 @@ type User struct {
 	LastLifesign sql.NullString `json:"last_lifesign" db:"last_lifesign"`
 	AvgLifesignInterval sql.NullString `json:"avg_lifesign_interval" db:"avg_lifesign_interval"`
 	Password string `json:"password" db:"password"`
-	RoleID sql.NullString `json:"role_id" db:"role_id"`
+	RoleID sql.NullString `json:"roles" db:"roles"`
 }

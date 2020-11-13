@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/the-echo-project/echo/api/models"
 	"net/http"
@@ -38,12 +39,12 @@ func JwtVerify(next http.Handler) http.Handler {
 		tk := &models.Token{}
 
 		_, err := jwt.ParseWithClaims(header, tk, func(token *jwt.Token) (interface{}, error) {
-			return echoAuthSecret, nil
+			return []byte(echoAuthSecret), nil
 		})
 
 		if err != nil {
 			w.WriteHeader(http.StatusForbidden)
-			json.NewEncoder(w).Encode(`Exception: {Message: err.Error()}`)
+			json.NewEncoder(w).Encode(fmt.Sprintf(`Exception: {Message: %s}`, err.Error()))
 			return
 		}
 
