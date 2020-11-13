@@ -8,7 +8,7 @@ import (
 
 func TestInitDB(t *testing.T) {
 	confutil.ConfigPathOverride = "../../configs"
-	confutil.LoadOverrideConfig()
+	confutil.LoadConfig()
 	log.InitLogger()
 
 	err := InitDB()
