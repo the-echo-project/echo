@@ -3,20 +3,19 @@ package confutil
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"github.com/the-echo-project/echo/sdk/helper/osutil"
 	"github.com/the-echo-project/echo/sdk/helper/pathutil"
-	"os"
 )
 
 const(
-	// DefaultConfigPath is the default path to the configuration file
-	DefaultConfPath = "~/.echo/"
-
 	// ConfigPathEnv is the environment variable that can be used to override
 	// where the Echo config is.
 	ConfigPathEnv = "ECHO_CONFIG_PATH"
 )
 
 var (
+	// DefaultConfigPath is the default path to the configuration file
+	DefaultConfPath = ""
 	ConfigPathOverride string
 )
 
@@ -30,7 +29,7 @@ func LoadConfig() {
 
 func loadDefaultConfig() {
 	var configPath string
-	if configPath = os.Getenv(ConfigPathEnv); configPath == "" {
+	if configPath = osutil.GetEnvironmentVariable(ConfigPathEnv); configPath == "" {
 		configPath = DefaultConfPath
 	}
 

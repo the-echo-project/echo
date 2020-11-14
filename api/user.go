@@ -2,19 +2,21 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/the-echo-project/echo/api/models"
 	"github.com/the-echo-project/echo/internal/db"
 	"github.com/the-echo-project/echo/internal/log"
 	"net/http"
+	"strings"
 )
 
 func getUser(w http.ResponseWriter, r *http.Request) {
 	userID := mux.Vars(r)["user_id"]
-	log.This.Info(userID)
+	log.This.Info("Getting user ID of %s", userID)
 
 	var u models.User
-	err := db.EchoDB.QueryRowx("SELECT * FROM users WHERE user_id = $1", userID).StructScan(&u)
+	err := db.EchoDB.QueryRowx("SELECT first_name, last_name, username, email, last_lifesign, avg_lifesign_interval, roles FROM users WHERE user_id = $1", userID).StructScan(&u)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.This.Warning(err.Error())
@@ -34,7 +36,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&u)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		log.This.Error("Couldn't decode JSON for user POST: %s", err)
+		log.This.Error("Couldn't decode JSON for user POST: %s", err.Error())
 		return
 	}
 
@@ -45,7 +47,29 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func updateUser(w http.ResponseWriter, r http.Request) {
-	// implement
+func updateUser(w http.ResponseWriter, r *http.Request) {
+	userID := mux.Vars(r)["user_id"]
+	log.This.Info("Patching user ID of %s", userID)
+
+	var u models.User
+	err := json.NewDecoder(r.Body).Decode(&u)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.This.Error("Couldn't decode JSON for user PATCH: %s", err.Error())
+		return
+	}
+
+	parameters, values, err := db.QueryParametersFromDBStructWithExclusions(u, []string{"password"})
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.This.Error("Couldn't parse db parameters for PATCH: %s", err.Error())
+		return
+	}
+
+	if _, err := db.EchoDB.Query(fmt.Sprintf("UPDATE users SET " + strings.Join(parameters, ",") + " WHERE user_id = '%s'", userID), values...); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.This.Warning(err.Error())
+		return
+	}
 }
 
