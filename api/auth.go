@@ -6,6 +6,7 @@ import (
 	"github.com/the-echo-project/echo/api/models"
 	"github.com/the-echo-project/echo/internal/db"
 	"github.com/the-echo-project/echo/internal/log"
+	"github.com/the-echo-project/echo/sdk/helper/passutil"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
@@ -16,8 +17,6 @@ var (
 	echoAuthSecret = os.Getenv("ECHO_AUTH_SECRET")
 )
 
-// TODO: Add JWT secret env variable. Currently "secret"
-// TODO: Add user-definable token expiry
 // TODO: Add persistence storage layer for JWT metadata, for invalidating tokens prematurely
 // TODO: Add refresh tokens
 // TODO: Do we need a token helper package, or can it be self contained in package "api"?
@@ -39,7 +38,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(reqUser.Password))
+	err = passutil.Compare([]byte(dbUser.Password), []byte(reqUser.Password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
 		w.WriteHeader(http.StatusUnauthorized)
 		log.This.Warning(err.Error())

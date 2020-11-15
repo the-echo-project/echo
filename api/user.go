@@ -7,6 +7,7 @@ import (
 	"github.com/the-echo-project/echo/api/models"
 	"github.com/the-echo-project/echo/internal/db"
 	"github.com/the-echo-project/echo/internal/log"
+	"github.com/the-echo-project/echo/sdk/helper/contextUtil"
 	"net/http"
 	"strings"
 )
@@ -15,6 +16,22 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	userID := mux.Vars(r)["user_id"]
 	log.This.Info("Getting user ID of %s", userID)
 
+	sendUserEntryFromDB(w, userID)
+}
+
+func getMyUser(w http.ResponseWriter, r *http.Request) {
+	userID, err := contextUtil.GetUserIDFromTokenContext(r.Context())
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.This.Warning(err.Error())
+		return
+	}
+	log.This.Info("Getting MY user of ID %s", userID)
+
+	sendUserEntryFromDB(w, userID)
+}
+
+func sendUserEntryFromDB(w http.ResponseWriter, userID string) {
 	var u models.User
 	err := db.EchoDB.QueryRowx("SELECT first_name, last_name, username, email, last_lifesign, avg_lifesign_interval, roles FROM users WHERE user_id = $1", userID).StructScan(&u)
 	if err != nil {

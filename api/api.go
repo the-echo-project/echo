@@ -30,6 +30,7 @@ func NetRun() {
 	ApiRouter := EchoMainRouter.PathPrefix("/api").Subrouter()
 	ApiRouter.Use(JwtVerify)
 	ApiRouter.HandleFunc("/User", createUser).Methods("POST")
+	ApiRouter.HandleFunc("/User", getMyUser).Methods("GET")
 	ApiRouter.HandleFunc("/User/{user_id}", getUser).Methods("GET")
 	ApiRouter.HandleFunc("/User/{user_id}", updateUser).Methods("PATCH")
 

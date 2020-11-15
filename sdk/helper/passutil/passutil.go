@@ -1,11 +1,10 @@
 package passutil
 
 import (
-	"github.com/the-echo-project/echo/internal/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func HashAndSalt(pwd []byte) string {
+func HashAndSalt(pwd []byte) (string, error) {
 	// Use GenerateFromPassword to hash & salt pwd.
 	// MinCost is just an integer constant provided by the bcrypt
 	// package along with DefaultCost & MaxCost.
@@ -13,10 +12,10 @@ func HashAndSalt(pwd []byte) string {
 	// than the MinCost (4)
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
 	if err != nil {
-		log.This.Warning(err.Error())
+		return "", err
 	}    // GenerateFromPassword returns a byte slice so we need to
 	// convert the bytes to a string and return it
-	return string(hash)
+	return string(hash), nil
 }
 
 func Compare(hash []byte, password []byte) error  {

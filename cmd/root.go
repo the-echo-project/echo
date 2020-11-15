@@ -19,6 +19,6 @@ func Execute() error {
 
 func init() {
 	cobra.OnInitialize(confutil.LoadConfig)
-	rootCmd.PersistentFlags().StringVar(&confutil.ConfigPathOverride, "config", "", "config file (default is $HOME/.echo.yaml)")
+	rootCmd.PersistentFlags().StringVar(&confutil.ConfigPath, "config", "", "config file (default is $HOME/.echo.yaml)")
 }
 

@@ -3,63 +3,31 @@ package confutil
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"github.com/the-echo-project/echo/sdk/helper/osutil"
 	"github.com/the-echo-project/echo/sdk/helper/pathutil"
 )
 
-const(
-	// ConfigPathEnv is the environment variable that can be used to override
-	// where the Echo config is.
-	ConfigPathEnv = "ECHO_CONFIG_PATH"
-)
+type config struct {
+	LogDir string
+	DBConnURL string
+	ArchiveStore string
+	TokenSecret string
+}
 
 var (
-	// DefaultConfigPath is the default path to the configuration file
-	DefaultConfPath = ""
-	ConfigPathOverride string
+	// ConfigPath is the path to the configuration file. Default is working directory. Re-assign variable before calling LoadConfig to specify alternate directory.
+	ConfigPath = "./"
 )
 
 func LoadConfig() {
-	if ConfigPathOverride == "" {
-		loadDefaultConfig()
-	} else {
-		loadOverrideConfig()
-	}
-}
-
-func loadDefaultConfig() {
-	var configPath string
-	if configPath = osutil.GetEnvironmentVariable(ConfigPathEnv); configPath == "" {
-		configPath = DefaultConfPath
-	}
-
 	var err error
-	configPath, err = pathutil.Pathfinder(configPath)
+	confDir, err := pathutil.Pathfinder(ConfigPath)
 	if err != nil {
-		panic(fmt.Errorf("Error finding config path %s", configPath))
+		panic(fmt.Errorf("Error finding config path %s", ConfigPath))
 	}
 
 	viper.SetConfigName("echo_conf")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(pathutil.PathWithoutTrailingSlash(configPath))
-
-	err = viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("Error loading config from: %s", err))
-	}
-}
-
-func loadOverrideConfig() {
-
-	var err error
-	ConfigPathOverride, err = pathutil.Pathfinder(ConfigPathOverride)
-	if err != nil {
-		panic(fmt.Errorf("Error finding config path %s", ConfigPathOverride))
-	}
-
-	viper.SetConfigName("echo_conf")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(pathutil.PathWithoutTrailingSlash(ConfigPathOverride))
+	viper.AddConfigPath(pathutil.PathWithoutTrailingSlash(confDir))
 
 	err = viper.ReadInConfig()
 	if err != nil {

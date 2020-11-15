@@ -21,7 +21,7 @@ func CommonMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// JwtVerify ensures that the provided token is valid, and handles the request with context.
+// JwtVerify ensures that the provided token is valid, and handles the request with contextUtil.
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

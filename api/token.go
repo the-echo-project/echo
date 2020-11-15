@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// get user context into a token model.
+// get user contextUtil into a token model.
 func UserContextAsTokenModel(r *http.Request) *models.Token {
 	return r.Context().Value("user").(*models.Token)
 }
