@@ -1,0 +1,622 @@
+swagger: '2.0'
+info:
+  description: |
+    This is the documentation for the Echo API. You can find out more about
+    Echo at [https://github.com/the-echo-project/echo](https://github.com/the-echo-project/echo).
+  version: 1.0.0
+  title: Echo API
+  contact:
+    email: developer@onkraken.net
+  license:
+    name: MIT
+    url: https://github.com/the-echo-project/echo/blob/trunk/LICENSE
+tags:
+  - name: Users
+    description: User operations
+paths:
+  /Users:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User object to be added
+          required: true
+          schema:
+            $ref: '#/definitions/CreateUserRequest'
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CreateUserResponse'
+        400:
+          description: Supplied user configuration is invalid or items missing.
+        409:
+          description: User already exists.
+    get:
+      tags:
+        - Users
+      summary: Get user data
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: query
+          description: user_id to fetch
+          required: false
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+  /Users/My:
+    get:
+      tags:
+        - Users
+      summary: Get current authenticated user data
+      produces:
+        - application/json
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+  /Users/{user_id}:
+    get:
+      tags:
+        - Users
+      summary: Get user data
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          description: The user_id for the requested user
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+    patch:
+      tags:
+        - Users
+      summary: Update user data
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: path
+          description: The user_id for the requested user
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: User object to be modified
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PatchDocument'
+      responses:
+        200:
+          description: successful operation
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      parameters:
+        - name: user_id
+          in: path
+          description: user_id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: User not found
+  /Archive:
+    post:
+      tags:
+        - Archive
+      summary: Create new archive
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User object to be added
+          required: true
+          schema:
+            $ref: '#/definitions/CreateArchiveRequest'
+      responses:
+        200:
+          description: successful operation.
+        400:
+          description: Supplied archive configuration is invalid or items missing.
+        409:
+          description: Archive already exists.
+  /Archive/{archive_id}:
+    get:
+      tags:
+        - Archive
+      summary: Obtain archive information.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: archive_id
+          description: archive_id to obtain.
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation.
+          schema:
+            $ref: '#/definitions/Archive'
+        404:
+          description: Archive not found
+    delete:
+      tags:
+        - Archive
+      summary: Delete archive
+      parameters:
+        - in: path
+          name: archive_id
+          description: archive to delete
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: Archive not found
+  /Launch:
+    post:
+      tags:
+        - Launch
+      summary: Create launch config
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateLaunchRequest'
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Launch'
+        400:
+          description: Supplied launch configuration is invalid
+    get:
+      tags:
+        - Launch
+      summary: Get launch config
+      parameters:
+        - name: launch_id
+          in: query
+          description: Launch config to fetch
+          required: false
+          type: string
+          format: uuid
+        - name: archive_id
+          in: query
+          description: Query archive for launch config
+          required: false
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Launch'
+        404:
+          description: Launch config not found
+    put:
+      tags:
+        - Launch
+      summary: Update launch config
+      parameters:
+        - name: body
+          in: body
+          description: Launch config object
+          required: true
+          schema:
+            $ref: '#/definitions/Launch'
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Launch'
+        400:
+          description: Supplied launch configuration is invalid
+        404:
+          description: Launch config not found
+  /Launch/{launch_id}:
+    delete:
+      tags:
+        - Launch
+      summary: Delete launch configuration
+      parameters:
+        - in: path
+          name: launch_id
+          description: launch configuration to delete
+          required: true
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: Launch configuration not found
+  /Poke:
+    post:
+      tags:
+        - Poke
+      summary: Create new poke
+      parameters:
+        - name: body
+          in: body
+          description: Poke object
+          required: true
+          schema:
+            $ref: '#/definitions/Poke'
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Supplied poke object is invalid
+    get:
+      tags:
+        - Poke
+      summary: Get poke information
+      parameters:
+        - name: launch_id
+          in: query
+          description: Query launch_id for pokes
+          required: false
+          type: string
+          format: uuid
+        - name: user_id
+          in: query
+          description: Query user_id for pokes
+          required: false
+          type: string
+          format: uuid
+        - name: status
+          in: query
+          description: Query for poke status
+          required: false
+          type: string
+          enum:
+            - "active"
+            - "resolved"
+            - "alert"
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Poke'
+  /Poke/{poke_id}/status:
+    put:
+      tags:
+        - Poke
+      summary: Update poke status
+      parameters:
+        - name: poke_id
+          in: path
+          description: poke_id to update
+          required: true
+          type: string
+          format: uuid
+        - name: body
+          in: body
+          description: new status
+          required: true
+          schema:
+            $ref: '#/definitions/PokeStatus'
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: poke_id not found
+  /Nuke/{id}:
+    post:
+      tags:
+        - Nuke
+      summary: Schedule a nuke job
+      parameters:
+        - name: id
+          in: path
+          description: id of resource to nuke
+          required: true
+          type: string
+          format: uuid
+        - name: idType
+          in: query
+          description: idType being provided
+          required: true
+          type: string
+          enum:
+            - "user_id"
+            - "launch_id"
+            - "archive_id"
+        - name: orbital
+          in: query
+          description: destroy everything (use with caution)
+          required: false
+          type: boolean
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: invalid idType
+  /Login:
+    post:
+      tags:
+        - Login
+      summary: User login
+      parameters:
+        - name: body
+          in: body
+          description: user credentials
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TokenResponse'
+        401:
+          description: login failed
+definitions:
+  User:
+    description: User object
+    type: object
+    properties:
+      user_id:
+        type: string
+        format: uuid
+      first_name:
+        type: string
+      last_name:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      last_lifesign:
+        type: string
+        format: date-time
+      avg_lifesign_interval:
+        type: string
+        format: date-time
+      roles:
+        type: array
+        items:
+          type: string
+  CreateUserRequest:
+    description: Object for user creation
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
+  CreateUserResponse:
+    description: Response from successfully creating a user
+    type: object
+    properties:
+      user_id:
+        type: string
+        format: uuid
+  UpdateUserRequest:
+    description: Object for user patch
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      last_lifesign:
+        type: string
+        format: date-time
+      avg_lifesign_interval:
+        type: string
+        format: date-time
+  Archive:
+    description: archive object
+    type: object
+    properties:
+      archive_id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      type:
+        type: string
+      hash_md5:
+        type: string
+      hash_sha1:
+        type: string
+      hash_sha256:
+        type: string
+      owning_launch_id:
+        type: string
+        format: uuid
+      source_path:
+        type: string
+      reported_bytes:
+        type: integer
+      last_verification:
+        type: string
+        format: date-time
+  CreateArchiveRequest:
+    description: object for archive creation
+    type: object
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      owning_launch_id:
+        type: string
+        format: uuid
+      source_path:
+        type: string
+      reported_bytes:
+        type: integer
+      last_verification:
+        type: string
+        format: date-time
+  PatchDocument:
+    description: A JSONPatch document as defined by RFC 6902
+    required:
+      - "op"
+      - "path"
+    properties:
+      op:
+        type: string
+        description: The operation to be performed
+        enum:
+          - "add"
+          - "remove"
+          - "replace"
+          - "move"
+          - "copy"
+          - "test"
+      path:
+        type: string
+        description: A JSON-Pointer
+      value:
+        type: object
+        description: The value to be used within the operations.
+      from:
+        type: string
+        description: A string containing a JSON Pointer value.
+  Launch:
+    description: launch config object
+    type: object
+    properties:
+      launch_id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      description:
+        type: string
+      launch_delay:
+        type: integer
+      launch_method:
+        type: string
+      poke_warning:
+        type: integer
+      poke_critical:
+        type: integer
+      archives:
+        type: array
+        items:
+          type: string
+          format: uuid
+      owner:
+        type: string
+        format: uuid
+  CreateLaunchRequest:
+    description: object for creating launch config
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      launch_delay:
+        type: integer
+      launch_method:
+        type: string
+      poke_warning:
+        type: integer
+      poke_critical:
+        type: integer
+      archives:
+        type: array
+        items:
+          type: string
+          format: uuid
+  Poke:
+    description: poke object
+    type: object
+    properties:
+      poke_id:
+        type: string
+        format: uuid
+      user_id:
+        type: string
+        format: uuid
+      status:
+        type: string
+        enum:
+          - "active"
+          - "resolved"
+          - "alert"
+  PokeStatus:
+    description: poke status
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - "active"
+          - "resolved"
+          - "alert"
+  Login:
+    description: user login data
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  TokenResponse:
+    description: token response
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - "success"
+          - "unauthorised"
+      token:
+        type: string

@@ -47,7 +47,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 	expiresAt := time.Now().Add(time.Minute * 100000).Unix()
 	tk := &models.Token{
-		UserID: string(dbUser.UserID[:]),
+		UserID: dbUser.UserID[:],
 		Name:   dbUser.Username,
 		Email:  dbUser.Email,
 		StandardClaims: &jwt.StandardClaims{
