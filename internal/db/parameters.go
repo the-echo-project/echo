@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"github.com/the-echo-project/echo/internal/log"
+	"github.com/the-echo-project/echo/internal/settings"
 	"reflect"
 )
 
@@ -51,7 +52,12 @@ func QueryParametersFromDBStructWithExclusions(s interface{}, columnExclusions [
 	for k, v := range dbUpdateValues {
 		count++
 		values = append(values, v)
-		set = append(set, fmt.Sprintf("%s = $%d", k, count))
+
+		if k == "password" {
+			set = append(set, fmt.Sprintf("%s = crypt($%d, gen_salt('%s'))", k, count, settings.PasswordSaltAlgorithm))
+		} else {
+			set = append(set, fmt.Sprintf("%s = $%d", k, count))
+		}
 	}
 	return
 }
